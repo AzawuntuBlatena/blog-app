@@ -14,7 +14,7 @@ mongoose
     console.log("MongoDb is Connected!!");
   })
   .catch((err) => {
-    console.error("Error connecting to MongoDb", err);
+    console.error("Error connecting to MongoDb:", err);
   });
 
 
@@ -28,3 +28,13 @@ app.listen(3000, () => {
 app.use(express.json()) // use json as an input for the backend
 app.use('/api/user', userRoutes)
 app.use('/api/auth', authRoutes)
+
+
+app.use((error, req, res, next) => {
+  const statusCode = error.statusCode || 500
+  const message = error.message || "Internal Servor Error!"
+  res.status(statusCode).json({ 
+    success: false,
+    statusCode,
+    message })
+})
